@@ -297,10 +297,7 @@ struct TrainingStatsView: View {
                     StatRow(label: "Can Train", value: stats.canTrain ? "Yes" : "No")
 
                     if let lastDate = stats.lastTrainingDate {
-                        let formatter = DateFormatter()
-                        formatter.dateStyle = .medium
-                        formatter.timeStyle = .short
-                        StatRow(label: "Last Training", value: formatter.string(from: lastDate))
+                        StatRow(label: "Last Training", value: formatTrainingDate(lastDate))
                     }
                 }
                 .padding()
@@ -328,6 +325,13 @@ struct TrainingStatsView: View {
                 }
             }
         }
+    }
+
+    private func formatTrainingDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 }
 
