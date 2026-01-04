@@ -226,11 +226,25 @@ struct ValidationResult: Identifiable {
         case syntax
     }
 
-    enum ValidationSeverity: String {
+    enum ValidationSeverity: String, Comparable {
         case error      // Critical issue
         case warning    // Potential issue
         case info       // Informational
         case valid      // Passed validation
+
+        /// Provides proper ordering for sorting (error first, then warning, info, valid)
+        private var sortOrder: Int {
+            switch self {
+            case .error: return 0
+            case .warning: return 1
+            case .info: return 2
+            case .valid: return 3
+            }
+        }
+
+        static func < (lhs: ValidationSeverity, rhs: ValidationSeverity) -> Bool {
+            lhs.sortOrder < rhs.sortOrder
+        }
     }
 }
 

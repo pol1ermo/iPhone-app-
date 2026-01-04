@@ -28,8 +28,6 @@ class ATCLanguageModel: ObservableObject {
     private let nMels = 80
     private let sampleRate = 16000
 
-    // Inference configuration
-    private var useNeuralEngine = true
 
     // MARK: - Initialization
 

@@ -74,8 +74,8 @@ class ATCValidationEngine: ObservableObject {
         // Add common sense checks
         results.append(contentsOf: performCommonSenseChecks(transcription))
 
-        // Sort by severity
-        results.sort { $0.severity.rawValue < $1.severity.rawValue }
+        // Sort by severity (errors first, then warnings, info, valid)
+        results.sort { $0.severity < $1.severity }
 
         lastValidationTime = Date().timeIntervalSince(startTime)
 
@@ -486,22 +486,6 @@ class InstructionSequenceRule: ValidationRule {
         var results: [ValidationResult] = []
 
         let instructions = transcription.instructions
-
-        // Check for proper instruction ordering
-        // Typically: altitude, heading, speed
-
-        var hasAltitudeInstruction = false
-        var hasHeadingAfterAltitude = false
-
-        for instruction in instructions {
-            if instruction.type == .climb || instruction.type == .descend || instruction.type == .maintain {
-                hasAltitudeInstruction = true
-            }
-
-            if (instruction.type == .turnLeft || instruction.type == .turnRight) && hasAltitudeInstruction {
-                hasHeadingAfterAltitude = true
-            }
-        }
 
         // Check for contact instruction with frequency
         let hasContact = instructions.contains { $0.type == .contact }

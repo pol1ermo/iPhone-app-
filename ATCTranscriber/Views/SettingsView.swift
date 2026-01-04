@@ -29,8 +29,8 @@ struct SettingsView: View {
                         Text("French").tag("fr-FR")
                         Text("Spanish").tag("es-ES")
                     }
-                    .onChange(of: selectedLanguage) { newValue in
-                        appState.speechService.setLanguage(newValue)
+                    .onChange(of: selectedLanguage) { _ in
+                        appState.speechService.setLanguage(selectedLanguage)
                     }
 
                     Toggle("Auto-validate transcriptions", isOn: $autoValidate)
@@ -50,8 +50,8 @@ struct SettingsView: View {
                                 .foregroundColor(.secondary)
 
                             Slider(value: $vadThreshold, in: -60...(-20), step: 5)
-                                .onChange(of: vadThreshold) { newValue in
-                                    appState.audioManager.setVADThreshold(Float(newValue))
+                                .onChange(of: vadThreshold) { _ in
+                                    appState.audioManager.setVADThreshold(Float(vadThreshold))
                                 }
                         }
                     }
