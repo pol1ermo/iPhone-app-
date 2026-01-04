@@ -45,6 +45,9 @@ class AppState: ObservableObject {
     }
 
     private func setupBindings() {
+        // Sync AIRAC cycle from manager
+        airacCycle = airacManager.currentCycle
+
         // Audio manager callbacks
         audioManager.onAudioCaptured = { [weak self] audioData in
             self?.processAudio(audioData)
@@ -62,7 +65,9 @@ class AppState: ObservableObject {
     }
 
     private func processAudio(_ audioData: AudioData) {
-        isProcessing = true
+        Task { @MainActor in
+            self.isProcessing = true
+        }
 
         Task {
             // Transcribe audio using local model

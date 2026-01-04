@@ -81,6 +81,13 @@ class AudioCaptureManager: NSObject, ObservableObject {
 
         // Use the hardware's native format to avoid sample rate mismatch
         let hardwareFormat = input.outputFormat(forBus: 0)
+
+        // Validate format has valid sample rate and channels
+        guard hardwareFormat.sampleRate > 0, hardwareFormat.channelCount > 0 else {
+            print("Invalid hardware format: sampleRate=\(hardwareFormat.sampleRate), channels=\(hardwareFormat.channelCount)")
+            return
+        }
+
         hardwareSampleRate = hardwareFormat.sampleRate
 
         // Install tap using the hardware format (AVAudioEngine requires matching sample rates)
