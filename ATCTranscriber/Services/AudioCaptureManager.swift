@@ -76,7 +76,11 @@ class AudioCaptureManager: NSObject, ObservableObject {
         inputNode = engine.inputNode
         guard let input = inputNode else { return }
 
-        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
+        // Safely create audio format
+        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1) else {
+            print("Failed to create audio format")
+            return
+        }
 
         // Install tap on input node
         input.installTap(onBus: 0, bufferSize: bufferSize, format: format) { [weak self] buffer, time in

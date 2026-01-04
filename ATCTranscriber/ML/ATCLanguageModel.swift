@@ -41,28 +41,25 @@ class ATCLanguageModel: ObservableObject {
     }
 
     private func loadModels() async {
-        // Load Whisper-style encoder model
-        do {
-            let config = MLModelConfiguration()
-            // Use .all for iOS 15 compatibility (includes Neural Engine when available)
-            config.computeUnits = .all
+        // Configuration for CoreML model loading
+        // Will be used when actual model files are bundled
+        let config = MLModelConfiguration()
+        config.computeUnits = .all  // Use .all for iOS 15 compatibility
 
-            // Try to load the model if it exists
-            if let modelURL = Bundle.main.url(forResource: "WhisperATCEncoder", withExtension: "mlmodelc") {
-                // Model exists, load it
-                print("Loading WhisperATC model...")
-            }
+        // Try to load the model if it exists
+        if let modelURL = Bundle.main.url(forResource: "WhisperATCEncoder", withExtension: "mlmodelc") {
+            print("Loading WhisperATC model from: \(modelURL)")
+            // TODO: Load actual model with: try? MLModel(contentsOf: modelURL, configuration: config)
+        }
 
-            // For now, we'll use a simulated model
-            // In production, this would load the actual CoreML model
-            whisperModel = WhisperATCModel()
-            decoderModel = ATCDecoderModel()
+        // For now, we'll use a simulated model
+        // In production, this would load the actual CoreML model
+        whisperModel = WhisperATCModel()
+        decoderModel = ATCDecoderModel()
+        _ = config  // Silence unused variable warning until model loading is implemented
 
-            await MainActor.run {
-                self.isLoaded = true
-            }
-        } catch {
-            print("Failed to load ML models: \(error)")
+        await MainActor.run {
+            self.isLoaded = true
         }
     }
 

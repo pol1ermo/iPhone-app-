@@ -125,19 +125,30 @@ class ATCSpeechRecognitionService: NSObject, ObservableObject {
                 request.addsPunctuation = false
             }
 
+            // Track if continuation has been resumed to prevent multiple resumes
+            var hasResumed = false
+
             recognitionTask = recognizer.recognitionTask(with: request) { result, error in
-                defer {
-                    try? FileManager.default.removeItem(at: url)
-                }
+                // Ensure we only resume once
+                guard !hasResumed else { return }
+
+                // Clean up temp file
+                try? FileManager.default.removeItem(at: url)
 
                 if let error = error {
                     print("Speech recognition error: \(error)")
+                    hasResumed = true
                     continuation.resume(returning: "")
                     return
                 }
 
                 if let result = result, result.isFinal {
+                    hasResumed = true
                     continuation.resume(returning: result.bestTranscription.formattedString)
+                } else if result == nil {
+                    // No result and no error - resume with empty string
+                    hasResumed = true
+                    continuation.resume(returning: "")
                 }
             }
         }
