@@ -30,7 +30,8 @@ class AudioCaptureManager: NSObject, ObservableObject {
     private var audioBuffer: [Float] = []
 
     // Audio settings optimized for radio communications
-    private let sampleRate: Double = 16000  // Optimal for speech
+    private let targetSampleRate: Double = 16000  // Optimal for speech recognition
+    private var hardwareSampleRate: Double = 44100  // Will be updated from hardware
     private let bufferSize: AVAudioFrameCount = 4096
 
     // Voice Activity Detection
@@ -56,9 +57,11 @@ class AudioCaptureManager: NSObject, ObservableObject {
 
         do {
             try session.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .allowBluetooth])
-            try session.setPreferredSampleRate(sampleRate)
+            try session.setPreferredSampleRate(targetSampleRate)
             try session.setPreferredIOBufferDuration(0.01)  // 10ms buffer
             try session.setActive(true)
+            // Update hardware sample rate from actual session
+            hardwareSampleRate = session.sampleRate
         } catch {
             print("Failed to setup audio session: \(error)")
         }
@@ -76,14 +79,12 @@ class AudioCaptureManager: NSObject, ObservableObject {
         inputNode = engine.inputNode
         guard let input = inputNode else { return }
 
-        // Safely create audio format
-        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1) else {
-            print("Failed to create audio format")
-            return
-        }
+        // Use the hardware's native format to avoid sample rate mismatch
+        let hardwareFormat = input.outputFormat(forBus: 0)
+        hardwareSampleRate = hardwareFormat.sampleRate
 
-        // Install tap on input node
-        input.installTap(onBus: 0, bufferSize: bufferSize, format: format) { [weak self] buffer, time in
+        // Install tap using the hardware format (AVAudioEngine requires matching sample rates)
+        input.installTap(onBus: 0, bufferSize: bufferSize, format: hardwareFormat) { [weak self] buffer, time in
             self?.processAudioBuffer(buffer)
         }
 
@@ -182,7 +183,7 @@ class AudioCaptureManager: NSObject, ObservableObject {
 
         // Simple one-pole high-pass filter
         let rc = 1.0 / (2.0 * Float.pi * cutoff)
-        let dt = 1.0 / Float(sampleRate)
+        let dt = 1.0 / Float(hardwareSampleRate)
         let alpha = rc / (rc + dt)
 
         output[0] = samples[0]
@@ -200,7 +201,7 @@ class AudioCaptureManager: NSObject, ObservableObject {
 
         // Low-pass filter
         let rc = 1.0 / (2.0 * Float.pi * highCutoff)
-        let dt = 1.0 / Float(sampleRate)
+        let dt = 1.0 / Float(hardwareSampleRate)
         let alpha = dt / (rc + dt)
 
         for i in 1..<output.count {
@@ -258,7 +259,7 @@ class AudioCaptureManager: NSObject, ObservableObject {
     func captureNoiseProfile() {
         guard !audioBuffer.isEmpty else { return }
 
-        noiseProfile = audioBuffer.suffix(Int(sampleRate))  // Last second
+        noiseProfile = audioBuffer.suffix(Int(hardwareSampleRate))  // Last second
         isNoiseProfileCaptured = true
 
         // Calculate noise floor
@@ -276,11 +277,11 @@ class AudioCaptureManager: NSObject, ObservableObject {
     // MARK: - Helper Methods
 
     private func createAudioData(from samples: [Float]) -> AudioData {
-        let duration = Double(samples.count) / sampleRate
+        let duration = Double(samples.count) / hardwareSampleRate
 
         return AudioData(
             samples: samples,
-            sampleRate: sampleRate,
+            sampleRate: hardwareSampleRate,
             duration: duration,
             timestamp: Date()
         )
@@ -293,7 +294,7 @@ class AudioCaptureManager: NSObject, ObservableObject {
 
     /// Get current audio buffer duration
     var currentBufferDuration: TimeInterval {
-        Double(audioBuffer.count) / sampleRate
+        Double(audioBuffer.count) / hardwareSampleRate
     }
 }
 
@@ -350,7 +351,7 @@ extension AudioCaptureManager {
             let magnitudes = computeFFTMagnitudes(windowedSamples)
 
             // Convert to mel scale
-            let melFrame = applyMelFilterbank(magnitudes, nMels: nMels, sampleRate: Float(sampleRate))
+            let melFrame = applyMelFilterbank(magnitudes, nMels: nMels, sampleRate: Float(hardwareSampleRate))
             melSpectrogram.append(melFrame)
         }
 
