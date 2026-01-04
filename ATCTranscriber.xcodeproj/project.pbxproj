@@ -21,6 +21,7 @@
 		A1000001229E5A7B00000012 /* ATCLanguageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E5A7A00000012 /* ATCLanguageModel.swift */; };
 		A1000001229E5A7B00000013 /* OnDeviceTrainingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001229E5A7A00000013 /* OnDeviceTrainingManager.swift */; };
 		A1000001229E5A7B00000014 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000001229E5A7A00000014 /* Assets.xcassets */; };
+		A1000001229E5A7B00000015 /* airac_data.json in Resources */ = {isa = PBXBuildFile; fileRef = A1000001229E5A7A00000017 /* airac_data.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		A1000001229E5A7A00000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1000001229E5A7A00000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000001229E5A7A00000016 /* ATCTranscriber.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ATCTranscriber.entitlements; sourceTree = "<group>"; };
+		A1000001229E5A7A00000017 /* airac_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = airac_data.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,11 +72,20 @@
 				A1000001229E5A7800000005 /* Models */,
 				A1000001229E5A7800000006 /* Services */,
 				A1000001229E5A7800000007 /* ML */,
+				A1000001229E5A7800000008 /* Resources */,
 				A1000001229E5A7A00000014 /* Assets.xcassets */,
 				A1000001229E5A7A00000015 /* Info.plist */,
 				A1000001229E5A7A00000016 /* ATCTranscriber.entitlements */,
 			);
 			path = ATCTranscriber;
+			sourceTree = "<group>";
+		};
+		A1000001229E5A7800000008 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A1000001229E5A7A00000017 /* airac_data.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		A1000001229E5A7800000003 /* Products */ = {
@@ -184,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1000001229E5A7B00000014 /* Assets.xcassets in Resources */,
+				A1000001229E5A7B00000015 /* airac_data.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

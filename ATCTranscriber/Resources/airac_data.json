@@ -1,0 +1,71 @@
+{
+  "cycle": {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "cycleNumber": "2413",
+    "effectiveDate": "2024-12-05T00:00:00Z",
+    "expirationDate": "2025-01-02T00:00:00Z",
+    "version": "1.0"
+  },
+  "airports": {
+    "KJFK": {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "icao": "KJFK",
+      "iata": "JFK",
+      "name": "John F Kennedy International",
+      "city": "New York",
+      "country": "USA",
+      "latitude": 40.6413,
+      "longitude": -73.7781,
+      "elevation": 13,
+      "transitionAltitude": 18000,
+      "frequencies": [
+        {"type": "tower", "frequency": 119.1, "name": "Kennedy Tower"},
+        {"type": "ground", "frequency": 121.9, "name": "Kennedy Ground"},
+        {"type": "approach", "frequency": 123.9, "name": "New York Approach"},
+        {"type": "atis", "frequency": 128.725, "name": "Kennedy ATIS"}
+      ],
+      "runways": [
+        {"id": "00000000-0000-0000-0000-000000000010", "identifier": "04L", "heading": 40, "length": 12079, "width": 150, "surface": "Asphalt", "ilsFrequency": 110.9, "ilsCategory": "CAT III"},
+        {"id": "00000000-0000-0000-0000-000000000011", "identifier": "22R", "heading": 220, "length": 12079, "width": 150, "surface": "Asphalt", "ilsFrequency": 111.5, "ilsCategory": "CAT III"},
+        {"id": "00000000-0000-0000-0000-000000000012", "identifier": "13L", "heading": 130, "length": 10000, "width": 150, "surface": "Asphalt", "ilsFrequency": 108.9, "ilsCategory": "CAT I"},
+        {"id": "00000000-0000-0000-0000-000000000013", "identifier": "31R", "heading": 310, "length": 10000, "width": 150, "surface": "Asphalt", "ilsFrequency": 109.5, "ilsCategory": "CAT I"}
+      ]
+    },
+    "KLAX": {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "icao": "KLAX",
+      "iata": "LAX",
+      "name": "Los Angeles International",
+      "city": "Los Angeles",
+      "country": "USA",
+      "latitude": 33.9425,
+      "longitude": -118.4081,
+      "elevation": 128,
+      "transitionAltitude": 18000,
+      "frequencies": [
+        {"type": "tower", "frequency": 133.9, "name": "LAX Tower"},
+        {"type": "ground", "frequency": 121.75, "name": "LAX Ground"},
+        {"type": "approach", "frequency": 124.5, "name": "SoCal Approach"},
+        {"type": "atis", "frequency": 133.8, "name": "LAX ATIS"}
+      ],
+      "runways": [
+        {"id": "00000000-0000-0000-0000-000000000020", "identifier": "24L", "heading": 249, "length": 10285, "width": 150, "surface": "Asphalt", "ilsFrequency": 111.7, "ilsCategory": "CAT I"},
+        {"id": "00000000-0000-0000-0000-000000000021", "identifier": "25L", "heading": 249, "length": 12091, "width": 150, "surface": "Asphalt", "ilsFrequency": 111.1, "ilsCategory": "CAT III"}
+      ]
+    }
+  },
+  "waypoints": {
+    "BETTE": {"id": "00000000-0000-0000-0000-000000000100", "identifier": "BETTE", "type": "fix", "latitude": 40.5, "longitude": -73.5, "region": "K2", "country": "USA"},
+    "MERIT": {"id": "00000000-0000-0000-0000-000000000101", "identifier": "MERIT", "type": "fix", "latitude": 40.7, "longitude": -73.8, "region": "K2", "country": "USA"},
+    "WAVEY": {"id": "00000000-0000-0000-0000-000000000102", "identifier": "WAVEY", "type": "fix", "latitude": 40.3, "longitude": -73.2, "region": "K2", "country": "USA"}
+  },
+  "vors": {
+    "JFK": {"id": "00000000-0000-0000-0000-000000000200", "identifier": "JFK", "name": "Kennedy", "frequency": 115.9, "latitude": 40.6413, "longitude": -73.7781, "hasDME": true, "magneticVariation": -13.0}
+  },
+  "ndbs": {},
+  "sids": {},
+  "stars": {},
+  "approaches": {},
+  "airways": {},
+  "airspaces": []
+}
