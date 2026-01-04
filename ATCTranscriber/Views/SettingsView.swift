@@ -154,9 +154,13 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    Link("Documentation", destination: URL(string: "https://example.com/docs")!)
+                    if let docsURL = URL(string: "https://example.com/docs") {
+                        Link("Documentation", destination: docsURL)
+                    }
 
-                    Link("Privacy Policy", destination: URL(string: "https://example.com/privacy")!)
+                    if let privacyURL = URL(string: "https://example.com/privacy") {
+                        Link("Privacy Policy", destination: privacyURL)
+                    }
                 }
             }
             .navigationTitle("Settings")

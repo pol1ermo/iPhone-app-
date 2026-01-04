@@ -95,14 +95,24 @@ class AIRACManager: ObservableObject {
         // Reference: Cycle 2401 started January 25, 2024
 
         let calendar = Calendar.current
-        let referenceDate = calendar.date(from: DateComponents(year: 2024, month: 1, day: 25))!
         let now = Date()
+
+        // Safely create reference date with fallback to current date
+        guard let referenceDate = calendar.date(from: DateComponents(year: 2024, month: 1, day: 25)) else {
+            // Fallback: return a cycle based on current date
+            return AIRACCycle(
+                cycleNumber: "0000",
+                effectiveDate: now,
+                expirationDate: calendar.date(byAdding: .day, value: 28, to: now) ?? now
+            )
+        }
 
         let daysSinceReference = calendar.dateComponents([.day], from: referenceDate, to: now).day ?? 0
         let cyclesSinceReference = daysSinceReference / 28
 
-        let currentCycleStart = calendar.date(byAdding: .day, value: cyclesSinceReference * 28, to: referenceDate)!
-        let currentCycleEnd = calendar.date(byAdding: .day, value: 28, to: currentCycleStart)!
+        // Safely calculate cycle dates with fallbacks
+        let currentCycleStart = calendar.date(byAdding: .day, value: cyclesSinceReference * 28, to: referenceDate) ?? now
+        let currentCycleEnd = calendar.date(byAdding: .day, value: 28, to: currentCycleStart) ?? now
 
         // Calculate cycle number (YYMM format)
         let year = calendar.component(.year, from: currentCycleStart) % 100
