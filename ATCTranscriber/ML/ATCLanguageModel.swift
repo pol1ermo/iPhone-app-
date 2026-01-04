@@ -30,7 +30,6 @@ class ATCLanguageModel: ObservableObject {
 
     // Inference configuration
     private var useNeuralEngine = true
-    private var computeUnits: MLComputeUnits = .cpuAndNeuralEngine
 
     // MARK: - Initialization
 
@@ -45,7 +44,8 @@ class ATCLanguageModel: ObservableObject {
         // Load Whisper-style encoder model
         do {
             let config = MLModelConfiguration()
-            config.computeUnits = computeUnits
+            // Use .all for iOS 15 compatibility (includes Neural Engine when available)
+            config.computeUnits = .all
 
             // Try to load the model if it exists
             if let modelURL = Bundle.main.url(forResource: "WhisperATCEncoder", withExtension: "mlmodelc") {
